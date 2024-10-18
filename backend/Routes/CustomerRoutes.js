@@ -19,8 +19,6 @@ import {
   fetchCurrentOrder,
   updateCustomer,
 
-  // addToCart, 
-  getCart,
   // removeFromCart, 
   checkout
 
