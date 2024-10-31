@@ -74,13 +74,12 @@ GROUP BY WEEK(ds.shipment_date), td.Truck_id;
 
 CREATE OR REPLACE VIEW `Delivery_times` AS
 SELECT 
-	od.Delivery_ID,
-    SUM(Time_taken) AS 'hours'
-FROM Order_delivery od
-JOIN orders o ON o.Order_ID = od.Order_ID
-JOIN truck_route tr ON o.Route_ID = tr.Route_ID
-GROUP BY Delivery_ID;
-
+	DISTINCT ds.Delivery_ID,
+    Time_taken AS 'hours'
+FROM Delivery_Schedule ds
+JOIN ORDER_DELIVERY od ON ds.Delivery_id = od.Delivery_id
+JOIN orders o on o.Order_ID = od.Order_ID
+JOIN truck_route tr ON o.Route_ID = tr.Route_ID;
 
 
 CREATE OR REPLACE VIEW store_manager_view AS

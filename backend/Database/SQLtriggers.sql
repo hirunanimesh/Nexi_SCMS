@@ -48,20 +48,49 @@ CREATE TRIGGER capacity_decrease_after_placement
 	AFTER INSERT ON order_delivery -- train_delivery
     FOR EACH ROW
 BEGIN
-	DECLARE capacity INT;
+	DECLARE capacity_ INT;
     DECLARE TrainID INT;
     
-    SELECT SUM(o.Total_capacity)
-    INTO capacity
+    SELECT o.Total_capacity
+    INTO capacity_
     FROM orders o
     WHERE NEW.Order_ID = o.Order_ID;
 
     UPDATE train t
     JOIN train_delivery td ON t.Train_ID = td.Train_ID
-    SET Available_space = Available_space-capacity
+    SET Available_space = Available_space-capacity_
     WHERE NEW.Delivery_ID = td.Train_Del_ID;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS capacity_decrease_after_placement$$
+CREATE TRIGGER capacity_decrease_after_placement
+    AFTER INSERT ON ORDER_DELIVERY
+    FOR EACH ROW
+BEGIN
+    DECLARE capacity_ INT;
+    DECLARE TrainID TINYINT;
+
+    -- Get the total capacity from the Orders table
+    SELECT o.Total_Capacity
+    INTO capacity_
+    FROM Orders o
+    WHERE NEW.Order_ID = o.Order_ID;
+
+    -- Get the Train ID from the Train_Delivery table related to the new Delivery ID
+    SELECT td.Train_ID
+    INTO TrainID
+    FROM Train_Delivery td
+    WHERE NEW.Delivery_ID = td.Train_Del_ID;
+
+    -- Update the Train table to decrease the available space
+    UPDATE Train t
+    SET Available_space = Available_space - capacity_
+    WHERE t.Train_ID = TrainID;
+END$$
+DELIMITER ;
+
 
 
 
@@ -171,12 +200,13 @@ CREATE TRIGGER check_available_space_before_update
 BEFORE UPDATE ON Train
 FOR EACH ROW
 BEGIN
-    IF NEW.Available_space < 0 THEN
+	IF NEW.Available_space < 0 THEN
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = 'Available space must be greater than 0';
+        
     END IF;
 END$$
 DELIMITER ;
 
 
--- SHOW TRIGGERS;
+SHOW TRIGGERS;

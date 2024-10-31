@@ -131,12 +131,16 @@ CREATE TABLE Orders (
 
 CREATE TABLE Delivery_Schedule (
   Delivery_id INT AUTO_INCREMENT,
+  Store_ID TINYINT NOT NULL,
   Shipment_date DATE,
   Vehicle_departure_time TIME,
   Vehicle_arrival_time TIME,
   Delivery_status ENUM('Not_Yet', 'On_Train', 'In_Truck','Completed'),
-  PRIMARY KEY (Delivery_id)
+  PRIMARY KEY (Delivery_id),
+  FOREIGN KEY (Store_ID) REFERENCES Store(Store_ID)
 );
+
+
 
 CREATE TABLE Order_Item (
   Set_id INT AUTO_INCREMENT,
@@ -275,6 +279,7 @@ INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Kumara Jayasinghe', 1, 0.0, 'Rest'),
 ('Lahiru Bandara', 1, 0.0, 'Rest');
 
+
 -- Store 2
 INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Thilina Senarath', 2, 0.0, 'Rest'),
@@ -339,6 +344,21 @@ INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Lakmal Jayasuriya', 6, 0.0, 'Rest'),
 ('Janith Senanayake', 6, 0.0, 'Rest'),
 ('Suren Wijeratne', 6, 0.0, 'Rest');
+
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
+('Mahesh Perera', 7, 0.0, 'Rest'),
+('Kamal Jayasuriya', 7, 0.0, 'Rest'),
+('Sampath Silva', 7, 0.0, 'Rest'),
+('Ruwan Bandara', 7, 0.0, 'Rest'),
+('Nishan Fernando', 7, 0.0, 'Rest'),
+('Prasanna Jayasinghe', 7, 0.0, 'Rest'),
+('Chanaka Weerasinghe', 7, 0.0, 'Rest'),
+('Lahiru Senanayake', 7, 0.0, 'Rest'),
+('Roshan Liyanage', 7, 0.0, 'Rest'),
+('Indika Jayasundara', 7, 0.0, 'Rest');
+
+
+
 
 -- Store 1
 INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
@@ -418,6 +438,17 @@ INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability
 ('Indika Jayasundara', 6, 0.0, 'Rest'),
 ('Lahiru Perera', 6, 0.0, 'Rest');
 
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
+('Sunil Perera', 7, 0.0, 'Rest'),
+('Suresh Fernando', 7, 0.0, 'Rest'),
+('Lakshan Jayasuriya', 7, 0.0, 'Rest'),
+('Thilina Bandara', 7, 0.0, 'Rest'),
+('Rangana Silva', 7, 0.0, 'Rest'),
+('Kasun Perera', 7, 0.0, 'Rest'),
+('Ajith Kumara', 7, 0.0, 'Rest'),
+('Nuwan Senarath', 7, 0.0, 'Rest'),
+('Pradeep Gayantha', 7, 0.0, 'Rest'),
+('Gayan Jayasinghe', 7, 0.0, 'Rest');
 
 
 

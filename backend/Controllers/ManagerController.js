@@ -150,7 +150,7 @@ async function getTruckDelivery(req, res) {
 
 async function addDeliverySchedule(req, res) {
   try {
-    const result = await Manager.addDeliverySchedule(req);
+    const result = await Manager.addDeliverySchedule(req.user.store);
     res
       .status(201)
       .json({ message: "Delivery schedule added successfully", data: result });
@@ -178,8 +178,9 @@ async function deleteDelivery(req, res) {
 // Controller to get the delivery schedule
 async function getDeliverySchedule(req, res) {
   const date = req.params.date;
+  const storeID = req.user.store;
   try {
-    const result = await Manager.getDeliverySchedule(date);
+    const result = await Manager.getDeliverySchedule(date, storeID);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({

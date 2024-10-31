@@ -790,7 +790,7 @@ CREATE PROCEDURE CheckoutOrder(
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        ROLLBACK; -- Rollback transaction if an error occurs
+        ROLLBACK; 
     END;
 
     START TRANSACTION;
@@ -815,15 +815,47 @@ END //
 
 DELIMITER ;
 
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS createTrainSchedule//
-CREATE PROCEDURE `createTrainSchedule`(delID INT,trainID INT)
+CREATE PROCEDURE `createTrainSchedule`(IN delID INT, IN trainID INT)
 BEGIN
-	INSERT INTO train_delivery(Train_Del_ID, Train_ID) VALUES(delID,trainID);
+    -- Declare variables
+    DECLARE capacity_ INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Rollback transaction on error
+        ROLLBACK;
+        -- Optionally, you can signal an error here if needed
+    END;
+
+    -- Start the transaction
+    START TRANSACTION;
+
+    -- Insert into Train_Delivery table
+    INSERT INTO Train_Delivery (Train_Del_ID, Train_ID) VALUES (delID, trainID);
     
+    -- Update Delivery_Schedule to set departure time and status
     UPDATE Delivery_Schedule
-    SET Vehicle_departure_time=CURTIME()
-    WHERE Delivery_ID=delID;
-    
+    SET Vehicle_departure_time = CURTIME(), Delivery_status = 'On_Train'
+    WHERE Delivery_ID = delID;
+
+    -- Get the total capacity from Orders related to the specific Delivery ID
+    SELECT SUM(o.Total_Capacity)
+    INTO capacity_
+    FROM Orders o
+    JOIN Order_Delivery od ON od.Order_ID = o.Order_ID
+    JOIN Delivery_Schedule ds ON ds.Delivery_ID = od.Delivery_ID
+    WHERE ds.Delivery_ID = delID;
+
+    -- Update the Train table to decrease the available space
+    UPDATE Train t
+    SET Available_space = Available_space - capacity_
+    WHERE t.Train_ID = trainID;
+
+    -- Commit the transaction if all statements succeed
+    COMMIT;
+
 END//
 DELIMITER ;
+

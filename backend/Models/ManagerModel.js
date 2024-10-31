@@ -220,15 +220,17 @@ static async getQuarterlySales(req, storeID) {
     }
   }
 
-  static async addDeliverySchedule(req) {
-    const query = `INSERT INTO delivery_schedule(shipment_date,Delivery_status) VALUES (CURDATE(), 'Not_Yet');`;
-    try {
-      const result = await pool.query(query);
+  static async addDeliverySchedule(store_id) {
+    const query = `INSERT INTO Delivery_Schedule (Store_ID, shipment_date, Delivery_status) VALUES (?, CURDATE(), 'Not_Yet');`;
+
+   try {
+      const result = await pool.query(query, [store_id]);
       return result;
-    } catch (error) {
+   } catch (error) {
+      console.error("Error adding delivery schedule:", error.message);
       throw error;
-    }
-  }
+   }
+}
 
   static async updateArrivalTime(deliveryID) {
     const query = `CALL Update_arrival_time(?);`;
@@ -250,10 +252,10 @@ static async getQuarterlySales(req, storeID) {
     }
   }
 
-  static async getDeliverySchedule(date) {
-    const query = `select * from Delivery_Schedule where shipment_date=?`;
+  static async getDeliverySchedule(date,store_id) {
+    const query = `select * from Delivery_Schedule where shipment_date=? and Store_ID=?`;
     try {
-      const result = await pool.query(query, date);
+      const result = await pool.query(query, [date,store_id]);
       return result[0];
     } catch (error) {
       throw error;
@@ -261,8 +263,6 @@ static async getQuarterlySales(req, storeID) {
   }
 
   static async addTruckDelivery(storeID, delivery_id) {
-    console.log("storeID", storeID);
-    console.log("delivery_id", delivery_id);
     const query = "call CreateTruckDelivery(?,?)";
     try {
       const result = await pool.query(query, [storeID, delivery_id]);
@@ -274,8 +274,6 @@ static async getQuarterlySales(req, storeID) {
 
   static async addTrainDelivery(delivery_id, train_id) {
     const query = `CALL createTrainSchedule(?, ?);`;
-    console.log("delivery_id", delivery_id);
-    console.log("train_id", train_id);
     try {
       const result = await pool.query(query, [delivery_id, train_id]);
       return result;
