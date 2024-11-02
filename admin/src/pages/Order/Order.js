@@ -219,10 +219,11 @@ function Order() {
                       </ul>
                     </details>
                   </td>
-                  <td>
+                  <td>    
                     <input
-                      type="checkbox"
-                      className="toggle toggle-primary"
+                      type="checkbox" 
+                      defaultChecked 
+                      className="checkbox checkbox-accent"
                       value={order.Order_ID}
                       checked={selectedForTrain.includes(order.Order_ID)}
                       onChange={handleCheckboxTrain}
@@ -279,8 +280,9 @@ function Order() {
                   </td>
                   <td>
                     <input
-                      type="checkbox"
-                      className="checkbox" 
+                      type="checkbox" 
+                      defaultChecked 
+                      className="checkbox checkbox-accent"
                       value={order.Order_ID}
                       checked={selectedForTruck.includes(order.Order_ID)}
                       onChange={handleCheckboxTruck}
