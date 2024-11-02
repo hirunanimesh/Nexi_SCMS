@@ -10,6 +10,7 @@ function Driver() {
   // State to store driver data
   const [drivers, setDrivers] = useState([]);
   const [newDriverName, setNewDriverName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     axios
@@ -54,6 +55,17 @@ function Driver() {
   const [showAddAlert, setShowAddAlert] = useState(false);
 
   const addDriver = () => {
+    if (!newDriverName) {
+      setErrorMessage("Please enter a driver name.");
+
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 1000);
+
+      return;
+    }
+    setErrorMessage("");
     setShowAddAlert(true);
   };
 
@@ -123,6 +135,7 @@ function Driver() {
         <button className="add-driver-button" onClick={addDriver}>
           Add Driver
         </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
       {showRemoveAlert && (
         <Alert

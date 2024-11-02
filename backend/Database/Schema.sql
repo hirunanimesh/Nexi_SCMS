@@ -78,9 +78,11 @@ CREATE TABLE Train (
   Train_ID TINYINT AUTO_INCREMENT,
   Train_Name VARCHAR(20) NOT NULL,
   Capacity INT NOT NULL,
-  Available_space INT NOT NULL DEFAULT 0,
+  Available_space INT NOT NULL ,
   PRIMARY KEY (Train_ID)
 );
+
+
 
 CREATE TABLE Train_Schedule (
   Trip_ID INT AUTO_INCREMENT,
@@ -129,12 +131,16 @@ CREATE TABLE Orders (
 
 CREATE TABLE Delivery_Schedule (
   Delivery_id INT AUTO_INCREMENT,
+  Store_ID TINYINT NOT NULL,
   Shipment_date DATE,
   Vehicle_departure_time TIME,
   Vehicle_arrival_time TIME,
   Delivery_status ENUM('Not_Yet', 'On_Train', 'In_Truck','Completed'),
-  PRIMARY KEY (Delivery_id)
+  PRIMARY KEY (Delivery_id),
+  FOREIGN KEY (Store_ID) REFERENCES Store(Store_ID)
 );
+
+
 
 CREATE TABLE Order_Item (
   Set_id INT AUTO_INCREMENT,
@@ -142,7 +148,7 @@ CREATE TABLE Order_Item (
   Order_ID INT NOT NULL,
   Quantity INT DEFAULT 1,
   Order_Item_Capacity INT DEFAULT 0,
-  Order_item_Price DECIMAL(8,2) DEFAULT 0,
+  Order_item_Price DECIMAL(10,2) DEFAULT 0,
   PRIMARY KEY (Set_id),
   FOREIGN KEY (Product_ID) REFERENCES Product(Product_ID),
   FOREIGN KEY (Order_ID) REFERENCES Orders(Order_ID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -260,115 +266,261 @@ INSERT INTO Truck_Route(Store_ID,Route,Time_Taken) VALUES
 (7, 'Kandy-Digana-Mahiyanganaya', 3),
 (7, 'Kandy-Matale-Dambulla', 2.5);
 
+-- Store 1
 INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
-('Vihanga Muthumala', 1, 0.0, 'On_Trip'),
+('Vihanga Muthumala', 1, 0.0, 'Rest'),
 ('Sahan Perera', 1, 0.0, 'Rest'),
 ('Kasun Gayantha', 1, 0.0, 'Rest'),
 ('Nuwan Perera', 1, 0.0, 'Rest'),
 ('Saman Wijesinghe', 1, 0.0, 'Rest'),
+('Manjula Silva', 1, 0.0, 'Rest'),
+('Rohan Perera', 1, 0.0, 'Rest'),
+('Pradeep Jayasekara', 1, 0.0, 'Rest'),
+('Kumara Jayasinghe', 1, 0.0, 'Rest'),
+('Lahiru Bandara', 1, 0.0, 'Rest');
 
+
+-- Store 2
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Thilina Senarath', 2, 0.0, 'Rest'),
 ('Amila Bandara', 2, 0.0, 'Rest'),
 ('Dilanka Gunasekara', 2, 0.0, 'Rest'),
 ('Hiruna Gimhana', 2, 0.0, 'Rest'),
-('Kamal Perera', 2, 0.0, 'Not_Available'),
+('Kamal Perera', 2, 0.0, 'Rest'),
+('Sampath Weerasinghe', 2, 0.0, 'Rest'),
+('Sandun Dissanayake', 2, 0.0, 'Rest'),
+('Ruwan Jayasundara', 2, 0.0, 'Rest'),
+('Nuwan Liyanage', 2, 0.0, 'Rest'),
+('Roshan Silva', 2, 0.0, 'Rest');
 
+-- Store 3
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nimal Perera', 3, 0.0, 'Rest'),
 ('Sunil Perera', 3, 0.0, 'Rest'),
-('Ruwan Perera', 3, 0.0, 'Not_Available'),
+('Ruwan Perera', 3, 0.0, 'Rest'),
 ('Gayan Perera', 3, 0.0, 'Rest'),
 ('Suresh Perera', 3, 0.0, 'Rest'),
+('Mahesh Kumara', 3, 0.0, 'Rest'),
+('Chathura Bandara', 3, 0.0, 'Rest'),
+('Indika Fernando', 3, 0.0, 'Rest'),
+('Roshan De Silva', 3, 0.0, 'Rest'),
+('Ranga Senanayake', 3, 0.0, 'Rest');
 
+-- Store 4
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nishan Perera', 4, 0.0, 'Rest'),
-('Ruwan Wijesinghe', 4, 0.0, 'On_Trip'),
+('Ruwan Wijesinghe', 4, 0.0, 'Rest'),
 ('Suresh Wijesinghe', 4, 0.0, 'Rest'),
 ('Nuwan Wijesinghe', 4, 0.0, 'Rest'),
 ('Kasun Wijesinghe', 4, 0.0, 'Rest'),
+('Sameera Silva', 4, 0.0, 'Rest'),
+('Anura Bandara', 4, 0.0, 'Rest'),
+('Ajith Weerasinghe', 4, 0.0, 'Rest'),
+('Chathura Fernando', 4, 0.0, 'Rest'),
+('Nuwan Gamage', 4, 0.0, 'Rest');
 
+-- Store 5
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Thilina Wijesinghe', 5, 0.0, 'Rest'),
-('Amila Wijesinghe', 5, 0.0, 'On_Trip'),
+('Amila Wijesinghe', 5, 0.0, 'Rest'),
 ('Dilanka Wijesinghe', 5, 0.0, 'Rest'),
 ('Hiruna Wijesinghe', 5, 0.0, 'Rest'),
 ('Kamal Wijesinghe', 5, 0.0, 'Rest'),
+('Dilan Perera', 5, 0.0, 'Rest'),
+('Sajith Liyanage', 5, 0.0, 'Rest'),
+('Sumith Jayasinghe', 5, 0.0, 'Rest'),
+('Manoj Dias', 5, 0.0, 'Rest'),
+('Gayan Siriwardana', 5, 0.0, 'Rest');
 
+-- Store 6
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nimal Wijesinghe', 6, 0.0, 'Rest'),
-('Sunil Wijesinghe', 6, 0.0, 'On_Trip'),
+('Sunil Wijesinghe', 6, 0.0, 'Rest'),
 ('Ruwan Wijesinghe', 6, 0.0, 'Rest'),
 ('Gayan Wijesinghe', 6, 0.0, 'Rest'),
-('Suresh Wijesinghe', 6, 0.0, 'Rest');
+('Suresh Wijesinghe', 6, 0.0, 'Rest'),
+('Chanaka Kumara', 6, 0.0, 'Rest'),
+('Prasanna Gamage', 6, 0.0, 'Rest'),
+('Lakmal Jayasuriya', 6, 0.0, 'Rest'),
+('Janith Senanayake', 6, 0.0, 'Rest'),
+('Suren Wijeratne', 6, 0.0, 'Rest');
 
+INSERT INTO Driver (Driver_Name, Store_ID, Work_Hours, Availability) VALUES
+('Mahesh Perera', 7, 0.0, 'Rest'),
+('Kamal Jayasuriya', 7, 0.0, 'Rest'),
+('Sampath Silva', 7, 0.0, 'Rest'),
+('Ruwan Bandara', 7, 0.0, 'Rest'),
+('Nishan Fernando', 7, 0.0, 'Rest'),
+('Prasanna Jayasinghe', 7, 0.0, 'Rest'),
+('Chanaka Weerasinghe', 7, 0.0, 'Rest'),
+('Lahiru Senanayake', 7, 0.0, 'Rest'),
+('Roshan Liyanage', 7, 0.0, 'Rest'),
+('Indika Jayasundara', 7, 0.0, 'Rest');
+
+
+
+
+-- Store 1
 INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
-('Tharindu Perera', 1, 0.0, 'On_Trip'),
-('Lakshan Perera', 2, 0.0, 'Rest'),
+('Tharindu Perera', 1, 0.0, 'Rest'),
+('Lakshan Perera', 1, 0.0, 'Rest'),
 ('Ravindu Perera', 1, 0.0, 'Rest'),
 ('Nuwan Bandara', 1, 0.0, 'Rest'),
 ('Saman Gayantha', 1, 0.0, 'Rest'),
+('Kusal Silva', 1, 0.0, 'Rest'),
+('Chathura Weerasinghe', 1, 0.0, 'Rest'),
+('Pradeep Jayasekara', 1, 0.0, 'Rest'),
+('Indika Kumara', 1, 0.0, 'Rest'),
+('Kasun Jayasinghe', 1, 0.0, 'Rest');
 
+-- Store 2
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Thilina Gunasekara', 2, 0.0, 'Rest'),
 ('Amila Gimhana', 2, 0.0, 'Rest'),
 ('Dilanka Senarath', 2, 0.0, 'Rest'),
 ('Hiruna Wijesinghe', 2, 0.0, 'Rest'),
-('Kamal Wijesinghe', 2, 0.0, 'Not_Available'),
+('Kamal Wijesinghe', 2, 0.0, 'Rest'),
+('Sampath Perera', 2, 0.0, 'Rest'),
+('Sajith Bandara', 2, 0.0, 'Rest'),
+('Ruwan Jayasundara', 2, 0.0, 'Rest'),
+('Ranga Silva', 2, 0.0, 'Rest'),
+('Lahiru Bandara', 2, 0.0, 'Rest');
 
+-- Store 3
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nimal Wijesinghe', 3, 0.0, 'Rest'),
 ('Sunil Wijesinghe', 3, 0.0, 'Rest'),
-('Ruwan Wijesinghe', 3, 0.0, 'Not_Available'),
+('Ruwan Wijesinghe', 3, 0.0, 'Rest'),
 ('Gayan Wijesinghe', 3, 0.0, 'Rest'),
 ('Suresh Wijesinghe', 3, 0.0, 'Rest'),
+('Lakshan Kumara', 3, 0.0, 'Rest'),
+('Nuwan Gamage', 3, 0.0, 'Rest'),
+('Roshan Perera', 3, 0.0, 'Rest'),
+('Nishan Jayasinghe', 3, 0.0, 'Rest'),
+('Dilan Liyanage', 3, 0.0, 'Rest');
 
+-- Store 4
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nishan Wijesinghe', 4, 0.0, 'Rest'),
-('Ruwan Wijesinghe', 4, 0.0, 'On_Trip'),
+('Ruwan Wijesinghe', 4, 0.0, 'Rest'),
 ('Suresh Wijesinghe', 4, 0.0, 'Rest'),
 ('Nuwan Wijesinghe', 4, 0.0, 'Rest'),
 ('Kasun Wijesinghe', 4, 0.0, 'Rest'),
+('Chaminda Silva', 4, 0.0, 'Rest'),
+('Manjula Perera', 4, 0.0, 'Rest'),
+('Sumith Dias', 4, 0.0, 'Rest'),
+('Sameera Bandara', 4, 0.0, 'Rest'),
+('Gayan Perera', 4, 0.0, 'Rest');
 
-('Thilina Wijesinghe', 5, 0.0, 'Rest'),
-('Amila Wijesinghe', 5, 0.0, 'On_Trip'),
-('Dilanka Wijesinghe', 5, 0.0, 'Rest'),
+-- Store 5
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
+('Thilina Liyanage', 5, 0.0, 'Rest'),
+('Amila Wijesinghe', 5, 0.0, 'Rest'),
+('Dilanka Perera', 5, 0.0, 'Rest'),
 ('Hiruna Wijesinghe', 5, 0.0, 'Rest'),
 ('Kamal Wijesinghe', 5, 0.0, 'Rest'),
+('Lahiru Gamage', 5, 0.0, 'Rest'),
+('Roshan Jayasuriya', 5, 0.0, 'Rest'),
+('Kasun Bandara', 5, 0.0, 'Rest'),
+('Pradeep Weerasinghe', 5, 0.0, 'Rest'),
+('Anura Jayasuriya', 5, 0.0, 'Rest');
 
+-- Store 6
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
 ('Nimal Wijesinghe', 6, 0.0, 'Rest'),
-('Sunil Wijesinghe', 6, 0.0, 'On_Trip'),
+('Sunil Wijesinghe', 6, 0.0, 'Rest'),
 ('Ruwan Wijesinghe', 6, 0.0, 'Rest'),
 ('Gayan Wijesinghe', 6, 0.0, 'Rest'),
-('Suresh Wijesinghe', 6, 0.0, 'Rest');
+('Suresh Wijesinghe', 6, 0.0, 'Rest'),
+('Chathura Senarath', 6, 0.0, 'Rest'),
+('Rangana Silva', 6, 0.0, 'Rest'),
+('Prasanna Perera', 6, 0.0, 'Rest'),
+('Indika Jayasundara', 6, 0.0, 'Rest'),
+('Lahiru Perera', 6, 0.0, 'Rest');
+
+INSERT INTO Driver_Assistant (Assistant_Name, Store_ID, Work_Hours, Availability) VALUES
+('Sunil Perera', 7, 0.0, 'Rest'),
+('Suresh Fernando', 7, 0.0, 'Rest'),
+('Lakshan Jayasuriya', 7, 0.0, 'Rest'),
+('Thilina Bandara', 7, 0.0, 'Rest'),
+('Rangana Silva', 7, 0.0, 'Rest'),
+('Kasun Perera', 7, 0.0, 'Rest'),
+('Ajith Kumara', 7, 0.0, 'Rest'),
+('Nuwan Senarath', 7, 0.0, 'Rest'),
+('Pradeep Gayantha', 7, 0.0, 'Rest'),
+('Gayan Jayasinghe', 7, 0.0, 'Rest');
 
 
+
+
+-- Store 1
 INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
 ('001', 1, 0.0, TRUE),
 ('002', 1, 0.0, TRUE),
-('003', 1, 0.0, FALSE),
-('004', 2, 0.0, TRUE),
-('005', 2, 0.0, TRUE),
+('003', 1, 0.0, TRUE),
+('004', 1, 0.0, TRUE),
+('005', 1, 0.0, TRUE);
+
+-- Store 2
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
 ('006', 2, 0.0, TRUE),
-('007', 3, 0.0, FALSE),
-('008', 3, 0.0, TRUE),
-('009', 3, 0.0, TRUE),
-('010', 4, 0.0, FALSE),
-('011', 4, 0.0, TRUE),
-('012', 4, 0.0, TRUE),
-('013', 5, 0.0, TRUE),
-('014', 5, 0.0, FALSE),
-('015', 5, 0.0, TRUE),
-('016', 6, 0.0, TRUE),
-('017', 6, 0.0, TRUE),
-('018', 6, 0.0, TRUE),
-('019', 7, 0.0, FALSE),
-('020', 7, 0.0, TRUE),
-('021', 7, 0.0, TRUE);
+('007', 2, 0.0, TRUE),
+('008', 2, 0.0, TRUE),
+('009', 2, 0.0, TRUE),
+('010', 2, 0.0, TRUE);
+
+-- Store 3
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
+('011', 3, 0.0, TRUE),
+('012', 3, 0.0, TRUE),
+('013', 3, 0.0, TRUE),
+('014', 3, 0.0, TRUE),
+('015', 3, 0.0, TRUE);
+
+-- Store 4
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
+('016', 4, 0.0, TRUE),
+('017', 4, 0.0, TRUE),
+('018', 4, 0.0, TRUE),
+('019', 4, 0.0, TRUE),
+('020', 4, 0.0, TRUE);
+
+-- Store 5
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
+('021', 5, 0.0, TRUE),
+('022', 5, 0.0, TRUE),
+('023', 5, 0.0, TRUE),
+('024', 5, 0.0, TRUE),
+('025', 5, 0.0, TRUE);
+
+-- Store 6
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
+('026', 6, 0.0, TRUE),
+('027', 6, 0.0, TRUE),
+('028', 6, 0.0, TRUE),
+('029', 6, 0.0, TRUE),
+('030', 6, 0.0, TRUE);
+
+-- Store 7
+INSERT INTO Truck (Reg_number, Store_ID, Used_Hours, Availability) VALUES 
+('031', 7, 0.0, TRUE),
+('032', 7, 0.0, TRUE),
+('033', 7, 0.0, TRUE),
+('034', 7, 0.0, TRUE),
+('035', 7, 0.0, TRUE);
+
 
 
 
 INSERT INTO Train (Train_Name, Capacity, Available_space) VALUES
-('Podi Menike', 500, 500),
-('Udarata Menike', 450, 450),
-('Night Mail', 600, 600),
-('Express A', 400, 400),
-('Express B', 400, 400),
-('Intercity Express', 550, 550),
-('Uthaya Devi (ICE)', 500, 500),
-('Yal Devi (ICE)', 500, 500);
+('Podi Menike', 5000, 5000),
+('Udarata Menike', 4500, 4500),
+('Night Mail', 6000, 6000),
+('Express A', 4000, 4000),
+('Express B', 4000, 4000),
+('Intercity Express', 5500, 5500),
+('Uthaya Devi (ICE)', 5000, 5000),
+('Yal Devi (ICE)', 5000, 5000);
 
 
 

@@ -48,7 +48,7 @@ function AssistantWorkedHours() {
                 entry.Week_number,
                 entry.Assistant_ID,
                 entry.Assistant_Name,
-                entry.Work_Hours
+                entry.Hours_worked
             ]),
         });
 
@@ -83,7 +83,7 @@ function AssistantWorkedHours() {
                                         <td>{entry.Week_number}</td>
                                         <td>{entry.Assistant_ID}</td>
                                         <td>{entry.Assistant_Name}</td>
-                                        <td>{entry.Work_Hours}</td>
+                                        <td>{entry.Hours_worked}</td>
                                     </tr>
                                 ))}
                             </tbody>

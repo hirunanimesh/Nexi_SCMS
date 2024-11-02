@@ -39,7 +39,7 @@ BEGIN
         Week_number,
         a.Assistant_ID, 
         Assistant_Name, 
-        Work_Hours
+        Hours_worked
     FROM assistant_work_hours awh
     JOIN driver_assistant a ON a.Assistant_ID = awh.Assistant_ID
     WHERE a.Store_ID = storeID;
@@ -502,7 +502,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS GetCurrentOrder$$
-CREATE PROCEDURE GetCurrentOrder(IN customer_id INT)
+CREATE PROCEDURE GetCurrentOrder(IN customer_id_ INT)
 BEGIN
 	SELECT 
 		Order_ID,
@@ -511,7 +511,7 @@ BEGIN
 		Total_Price
 	FROM Orders
 	WHERE 
-		Customer_ID = customer_id 
+		Customer_ID = customer_id_ 
 		AND Order_state = 'Paid'
 	ORDER BY Ordered_Date DESC;
 END$$
@@ -780,7 +780,8 @@ DELIMITER ;
 
 
 
-DELIMITER $$
+DELIMITER //
+DROP PROCEDURE IF EXISTS CheckoutOrder//
 CREATE PROCEDURE CheckoutOrder(
     IN p_Customer_ID INT,
     IN p_Store_ID INT,
@@ -789,7 +790,7 @@ CREATE PROCEDURE CheckoutOrder(
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        ROLLBACK; -- Rollback transaction if an error occurs
+        ROLLBACK; 
     END;
 
     START TRANSACTION;
@@ -810,6 +811,51 @@ BEGIN
         COMMIT;
         SELECT 'Checkout successful.' AS message, 1 AS success;
     END IF;
-END $$
+END //
 
 DELIMITER ;
+
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS createTrainSchedule//
+CREATE PROCEDURE `createTrainSchedule`(IN delID INT, IN trainID INT)
+BEGIN
+    -- Declare variables
+    DECLARE capacity_ INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Rollback transaction on error
+        ROLLBACK;
+        -- Optionally, you can signal an error here if needed
+    END;
+
+    -- Start the transaction
+    START TRANSACTION;
+
+    -- Insert into Train_Delivery table
+    INSERT INTO Train_Delivery (Train_Del_ID, Train_ID) VALUES (delID, trainID);
+    
+    -- Update Delivery_Schedule to set departure time and status
+    UPDATE Delivery_Schedule
+    SET Vehicle_departure_time = CURTIME(), Delivery_status = 'On_Train'
+    WHERE Delivery_ID = delID;
+
+    -- Get the total capacity from Orders related to the specific Delivery ID
+    SELECT SUM(o.Total_Capacity)
+    INTO capacity_
+    FROM Orders o
+    JOIN Order_Delivery od ON od.Order_ID = o.Order_ID
+    JOIN Delivery_Schedule ds ON ds.Delivery_ID = od.Delivery_ID
+    WHERE ds.Delivery_ID = delID;
+
+    -- Update the Train table to decrease the available space
+    UPDATE Train t
+    SET Available_space = Available_space - capacity_
+    WHERE t.Train_ID = trainID;
+
+    -- Commit the transaction if all statements succeed
+    COMMIT;
+
+END//
+DELIMITER ;
+

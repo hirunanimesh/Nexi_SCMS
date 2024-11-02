@@ -208,13 +208,12 @@ class Customer {
 
   static async checkout(Customer_ID, Store_ID, Route_ID) {
     const updateOrderStateQuery = `call CheckoutOrder(?, ?, ?)`;
-
     try {
       // Update the order state to 'paid' using separate values for each placeholder
       const [results] = await pool.query(updateOrderStateQuery, [
+        Customer_ID,
         Store_ID,
         Route_ID,
-        Customer_ID,
       ]);
 
       if (results.affectedRows === 0) {

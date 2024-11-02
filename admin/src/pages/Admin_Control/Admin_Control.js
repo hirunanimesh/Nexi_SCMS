@@ -23,7 +23,7 @@ const ManagerControl = () => {
     // Fetch stores
     axios
       .get("/admin/stores", { withCredentials: true })
-      .then((response) => {setStores(response.data); console.log(response.data)})
+      .then((response) => {setStores(response.data); })
       .catch((error) => console.error("Error fetching stores:", error));
   }, []);
 

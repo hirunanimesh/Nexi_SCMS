@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 import axios from "axios";
 
 const Signup = () => {
+
+  useEffect(() => {
+    axios.get("/manager/profile",{withCredentials:true})
+    .then((response) => {
+    })
+    .catch((error) => {
+      navigate("/"); 
+        console.error("Error fetching customer profile:", error);
+    });
+  }, []); 
+
   const [formData, setFormData] = useState({
     Name: "",
     Email: "",

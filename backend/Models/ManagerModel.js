@@ -100,7 +100,7 @@ static async getQuarterlySales(req, storeID) {
   const query = `CALL Quarterly_sales_from(?, ?)`; // Updated procedure call with two parameters
   try {
     const [rows] = await pool.query(query, [startDate, storeID]); // Pass both startDate and storeID
-    console.log(rows);
+   
     return rows[0]; // Return only the first element of rows
   } catch (error) {
     console.error("Error in getQuarterlySales:", error);
@@ -220,15 +220,17 @@ static async getQuarterlySales(req, storeID) {
     }
   }
 
-  static async addDeliverySchedule(req) {
-    const query = `INSERT INTO delivery_schedule(shipment_date,Delivery_status) VALUES (CURDATE(), 'Not_Yet');`;
-    try {
-      const result = await pool.query(query);
+  static async addDeliverySchedule(store_id) {
+    const query = `INSERT INTO Delivery_Schedule (Store_ID, shipment_date, Delivery_status) VALUES (?, CURDATE(), 'Not_Yet');`;
+
+   try {
+      const result = await pool.query(query, [store_id]);
       return result;
-    } catch (error) {
+   } catch (error) {
+      console.error("Error adding delivery schedule:", error.message);
       throw error;
-    }
-  }
+   }
+}
 
   static async updateArrivalTime(deliveryID) {
     const query = `CALL Update_arrival_time(?);`;
@@ -250,10 +252,10 @@ static async getQuarterlySales(req, storeID) {
     }
   }
 
-  static async getDeliverySchedule(date) {
-    const query = `select * from Delivery_Schedule where shipment_date=?`;
+  static async getDeliverySchedule(date,store_id) {
+    const query = `select * from Delivery_Schedule where shipment_date=? and Store_ID=?`;
     try {
-      const result = await pool.query(query, date);
+      const result = await pool.query(query, [date,store_id]);
       return result[0];
     } catch (error) {
       throw error;
@@ -271,10 +273,7 @@ static async getQuarterlySales(req, storeID) {
   }
 
   static async addTrainDelivery(delivery_id, train_id) {
-    const query =
-      // "INSERT INTO train_delivery(Train_Del_ID, Train_ID) VALUES(?,?);";
-      `CALL createTrainSchedule(?, ?)`;
-      console.log('Model', delivery_id, train_id);
+    const query = `CALL createTrainSchedule(?, ?);`;
     try {
       const result = await pool.query(query, [delivery_id, train_id]);
       return result;

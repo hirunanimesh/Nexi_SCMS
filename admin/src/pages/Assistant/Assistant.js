@@ -10,6 +10,7 @@ function Assistant() {
   // State to store assistant data
   const [assistants, setAssistants] = useState([]);
   const [newAssistantName, setNewAssistantName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     axios
@@ -58,6 +59,17 @@ function Assistant() {
   const [showAddAlert, setShowAddAlert] = useState(false);
 
   const addAssistant = () => {
+    if (!newAssistantName) {
+      setErrorMessage("Please enter an assistant name.");
+
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 1000);
+
+      return;
+    }
+    setErrorMessage("");
     setShowAddAlert(true);
   };
 
@@ -127,6 +139,7 @@ function Assistant() {
         <button className="add-assistant-button" onClick={addAssistant}>
           Add Assistant
         </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
       {showRemoveAlert && (
         <Alert

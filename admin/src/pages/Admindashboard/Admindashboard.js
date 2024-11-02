@@ -121,7 +121,7 @@ function Admindashboard() {
           <div className='widget available-trucks'>
             <p>{totalAssistants > 0 ? `${Math.floor((activeAssistants / totalAssistants) * 100)}%` : 'Loading...'}</p>
             <div className='progress-bar'>
-              <div className='progress' style={{ width: `${Math.floor((activeTrucks / totalTrucks) * 100)}%` }}></div>
+              <div className='progress' style={{ width: `${Math.floor((activeAssistants / totalAssistants) * 100)}%` }}></div>
             </div>
             <h3>Available Trucks</h3>
           </div>

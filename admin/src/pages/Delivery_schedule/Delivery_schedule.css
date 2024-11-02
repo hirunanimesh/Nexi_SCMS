@@ -1,7 +1,7 @@
 .DScontainer {
     display: flex;
     height: 100vh; 
-    padding: 1vh 3vw 3vh 4vh;
+    padding: 10vh 3vw 3vh 4vh;
 }
 
 .DScontainer h1 {
