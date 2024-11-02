@@ -272,7 +272,9 @@ static async getQuarterlySales(req, storeID) {
 
   static async addTrainDelivery(delivery_id, train_id) {
     const query =
-      "INSERT INTO train_delivery(Train_Del_ID, Train_ID) VALUES(?,?);";
+      // "INSERT INTO train_delivery(Train_Del_ID, Train_ID) VALUES(?,?);";
+      `CALL createTrainSchedule(?, ?)`;
+      console.log('Model', delivery_id, train_id);
     try {
       const result = await pool.query(query, [delivery_id, train_id]);
       return result;
