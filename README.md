@@ -3,7 +3,7 @@
 
 ## Project Overview
 
-The **Supply Chain Management System** is designed for **Company A**, a production company located in Kandy, Sri Lanka. The system manages the entire supply chain for distributing products to customers islandwide, including wholesalers, retailers, and end customers. The system leverages the railway network for transporting goods to major cities, followed by truck deliveries from regional storage facilities to final destinations, ensuring efficient logistics and order fulfillment.
+The **Supply Chain Management System** is designed for **Company Nexi**, a production company located in Kandy, Sri Lanka. The system manages the entire supply chain for distributing products to customers islandwide, including wholesalers, retailers, and end customers. The system leverages the railway network for transporting goods to major cities, followed by truck deliveries from regional storage facilities to final destinations, ensuring efficient logistics and order fulfillment.
 
 ## Project Features
 
